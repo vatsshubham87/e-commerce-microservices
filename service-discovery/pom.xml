@@ -8,13 +8,21 @@
         <artifactId>e-commerce-microservices</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
     <artifactId>service-discovery</artifactId>
-
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-data-jpa</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
 </project>
