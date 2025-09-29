@@ -19,7 +19,7 @@ The architecture follows a microservices pattern, ensuring scalability, fault to
 - **Databases**: MySQL for relational data (users, orders), MongoDB for flexible product data.
 
 ### Architecture Diagram
-```mermaid
+## mermaid
 graph TD
     A[Client (UI/App)] --> B[API Gateway]
     B --> C[Eureka Server]
