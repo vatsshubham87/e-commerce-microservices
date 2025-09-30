@@ -32,3 +32,11 @@ graph TD
     D --> H[MySQL]
     F --> H
     E --> I[MongoDB]
+
+
+    ### Challenges Faced
+- **Maven Wrapper Missing**: Lacked `mvnw.cmd` for builds. Generated using `mvn -N wrapper:wrapper` after installing Maven 3.9.11.
+- **Eureka Server Failure**: `DataSourceAutoConfiguration` error due to default package. Moved `EurekaServerApplication.java` to correct package and excluded unnecessary auto-configuration.
+- **Dependency Vulnerabilities**: Addressed CVEs by updating `spring-cloud-dependencies` to 2023.0.3.
+- **Deprecated Spring Security APIs**: Updated `httpBasic()` and password encoding to modern APIs (`httpBasic(withDefaults())`, `BCryptPasswordEncoder`).
+- **Actuator Endpoint Issues**: Fixed 404 and empty `/actuator/info` by enabling Actuator and build metadata.
