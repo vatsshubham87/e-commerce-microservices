@@ -15,3 +15,18 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+info:
+  app:
+    name: User Service
+    description: Manages user authentication and profiles
+    version: 1.0-SNAPSHOT
