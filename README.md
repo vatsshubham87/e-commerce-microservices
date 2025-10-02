@@ -40,3 +40,5 @@ graph TD
 - **Dependency Vulnerabilities**: Addressed CVEs by updating `spring-cloud-dependencies` to 2023.0.3.
 - **Deprecated Spring Security APIs**: Updated `httpBasic()` and password encoding to modern APIs (`httpBasic(withDefaults())`, `BCryptPasswordEncoder`).
 - **Actuator Endpoint Issues**: Fixed 404 and empty `/actuator/info` by enabling Actuator and build metadata.
+-  **Challenge**: Database selection for microservices.
+- **Solution**: Used MySQL for structured user/order data, MongoDB for flexible product data.
