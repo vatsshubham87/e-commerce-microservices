@@ -1,14 +1,11 @@
 server:
-  port: 8080
+  port: 8082
 spring:
   application:
-    name: api-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+    name: product-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/ecommerce_products
 eureka:
   client:
     service-url:
@@ -25,6 +22,6 @@ management:
       enabled: true
 info:
   app:
-    name: API Gateway
-    description: Routes and authenticates requests for microservices
+    name: Product Service
+    description: Manage products
     version: 1.0-SNAPSHOT
