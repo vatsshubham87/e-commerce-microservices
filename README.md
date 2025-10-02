@@ -42,3 +42,5 @@ graph TD
 - **Actuator Endpoint Issues**: Fixed 404 and empty `/actuator/info` by enabling Actuator and build metadata.
 -  **Challenge**: Database selection for microservices.
 - **Solution**: Used MySQL for structured user/order data, MongoDB for flexible product data.
+- **Challenge**: Centralized basic authentication.
+- **Solution**: Moved basic auth to `api-gateway` using Spring Security, securing all service endpoints.
