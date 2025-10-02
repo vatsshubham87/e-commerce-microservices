@@ -1,0 +1,24 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: payment-service
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+info:
+  app:
+    name: Payment Service
+    description: Manage payments
+    version: 1.0-SNAPSHOT

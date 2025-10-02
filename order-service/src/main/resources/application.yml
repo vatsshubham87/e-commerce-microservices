@@ -28,5 +28,5 @@ management:
 info:
   app:
     name: Order Service
-    description: Manages user authentication and profiles
+    description: Manage Orders
     version: 1.0-SNAPSHOT
