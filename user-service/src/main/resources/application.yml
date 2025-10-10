@@ -1,5 +1,6 @@
 server:
   port: 8081
+
 spring:
   application:
     name: user-service
@@ -11,10 +12,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true  # Show executed SQL statements
+  # Format logging for SQL and parameters
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
 management:
   endpoints:
     web:
@@ -25,6 +34,7 @@ management:
       enabled: true
     build:
       enabled: true
+
 info:
   app:
     name: User Service
