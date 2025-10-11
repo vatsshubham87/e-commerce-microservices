@@ -44,3 +44,5 @@ graph TD
 - **Solution**: Used MySQL for structured user/order data, MongoDB for flexible product data.
 - **Challenge**: Centralized basic authentication.
 - **Solution**: Moved basic auth to `api-gateway` using Spring Security, securing all service endpoints.
+- **Challenge**: Setting up auth-service for database-backed authentication.
+- **Solution**: Created `auth-service` with MySQL and Eureka integration.
