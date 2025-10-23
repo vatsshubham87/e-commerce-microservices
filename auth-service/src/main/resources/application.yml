@@ -1,0 +1,53 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_users
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true  # Show executed SQL statements
+    # Format logging for SQL and parameters
+  logging:
+    level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    openfeign:
+      enabled: true
+      client:
+        config:
+          user-service:
+            connectTimeout: 5000
+            readTimeout: 5000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+info:
+  app:
+    name: Auth Service
+    description: Handles authentication for the E-Commerce Platform
+    version: 1.0-SNAPSHOT
+gateway:
+  secret: my-gateway-secret-123
+auth:
+  secret: my-auth-secret-123

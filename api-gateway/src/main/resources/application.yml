@@ -9,6 +9,16 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+    loadbalancer:
+      ribbon:
+        enabled: false
+    openfeign:
+      enabled: true
+      client:
+        config:
+          auth-service:
+            connectTimeout: 5000
+            readTimeout: 5000
 eureka:
   client:
     service-url:
@@ -28,3 +38,5 @@ info:
     name: API Gateway
     description: Routes and authenticates requests for microservices
     version: 1.0-SNAPSHOT
+gateway:
+  secret: my-gateway-secret-123

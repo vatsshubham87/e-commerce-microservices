@@ -1,6 +1,6 @@
-package org.microservicesrevision.user.repo;
+package org.microservicesrevision.auth.repo;
 
-import org.microservicesrevision.user.model.User;
+import org.microservicesrevision.auth.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

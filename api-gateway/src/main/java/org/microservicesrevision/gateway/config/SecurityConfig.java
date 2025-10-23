@@ -1,42 +1,78 @@
 package org.microservicesrevision.gateway.config;
 
+import org.microservicesrevision.gateway.dto.UserDetailsDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.reactive.function.client.WebClient;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 
 @Configuration
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    @Bean
-    public MapReactiveUserDetailsService userDetailsService() {
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        UserDetails user = User.withUsername("admin")
-                .password(encoder.encode("password"))
-                .roles("USER")
-                .build();
-        return new MapReactiveUserDetailsService(user);
+    private final WebClient.Builder webClientBuilder;
+
+    @Value("${gateway.secret}")
+    private String gatewaySecret;
+
+    public SecurityConfig(WebClient.Builder webClientBuilder) {
+        this.webClientBuilder = webClientBuilder;
     }
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
+                                                         ReactiveAuthenticationManager authenticationManager) {
         http
-                .csrf(ServerHttpSecurity.CsrfSpec::disable) // disable CSRF for APIs
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
-                        .pathMatchers("/actuator/**").permitAll() // actuator endpoints public
-                        .anyExchange().authenticated() // everything else secured
+                        .pathMatchers("/actuator/**", "/eureka/**", "/*/actuator/**").permitAll()
+                        .anyExchange().authenticated()
                 )
-                .httpBasic(httpBasic -> {}) // enable HTTP Basic Auth
-                .formLogin(ServerHttpSecurity.FormLoginSpec::disable); // disable login form
+                .authenticationManager(authenticationManager)
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable);
         return http.build();
     }
+
+
+    @Bean
+    public ReactiveAuthenticationManager authenticationManager(WebClient.Builder webClientBuilder,
+                                                               @Value("${gateway.secret}") String gatewaySecret) {
+        return authentication -> {
+            String username = authentication.getName();
+            String password = authentication.getCredentials().toString();
+
+            // Build Basic Auth header
+            String basicAuth = "Basic " + Base64.getEncoder()
+                    .encodeToString((username + ":" + password).getBytes(StandardCharsets.UTF_8));
+
+            return webClientBuilder.build()
+                    .post()
+                    .uri("lb://auth-service/validate")
+                    .header(HttpHeaders.AUTHORIZATION, basicAuth)
+                    .header("X-Gateway-Secret", gatewaySecret)
+                    .retrieve()
+                    .bodyToMono(UserDetailsDTO.class)
+                    .map(userDetails -> {
+                        return new UsernamePasswordAuthenticationToken(
+                                userDetails.getUsername(),
+                                userDetails.getPassword(),
+                                userDetails.getAuthorities().stream()
+                                        .map(SimpleGrantedAuthority::new)
+                                        .toList()
+                        );
+                    });
+        };
+    }
+
 }
-
-

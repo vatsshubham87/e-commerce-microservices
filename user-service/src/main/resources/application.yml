@@ -40,3 +40,5 @@ info:
     name: User Service
     description: Manages user authentication and profiles
     version: 1.0-SNAPSHOT
+auth:
+  secret: your-auth-secret
